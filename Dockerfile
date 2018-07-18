@@ -92,18 +92,20 @@ ENV GOPATH /home/dev/go
 
 # Install Ruby and Rails dependencies
 # install RVM, Ruby, and Bundler
-RUN \curl -sSL https://rvm.io/mpapis.asc | gpg2 --import -
-RUN \curl -L https://get.rvm.io | bash -s stable
+RUN curl -sSL https://rvm.io/mpapis.asc | gpg2 --import -
+RUN curl -L https://get.rvm.io | bash -s stable
 RUN /bin/bash -l -c "rvm requirements"
 RUN /bin/bash -l -c "rvm install 2.0"
 RUN /bin/bash -l -c "gem install bundler --no-ri --no-rdoc"
-RUN usermod -aG rvm root
-RUN usermod -aG rvm dev
+RUN sudo usermod -aG rvm root
+RUN sudo usermod -aG rvm dev
 RUN /bin/bash -l -c "rvm install ruby --default"
 RUN /bin/bash -l -c "rvm install ruby-dev --default"
 
 # Install Rails
 RUN /bin/bash -l -c "gem install rails"
+
+RUN echo "export PATH=$PATH:/usr/local/rvm/gems/ruby-2.5.1-dev/bin:/usr/local/rvm/gems/ruby-2.5.1-dev@global/bin:/usr/local/rvm/rubies/ruby-2.5.1-dev/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/rvm/bin" >> /home/dev/.bashrc
 
 # Create a shared data volume
 # We need to create an empty file, otherwise the volume will
@@ -131,7 +133,8 @@ RUN echo "dev  ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers
 RUN chown -R dev: /home/dev
 USER dev
 
-# Add a fun prompt  alien:"\xF0\x9F\x91\xBD" fish:"\xF0\x9F\x90\xA0" elephant:"\xF0\x9F\x91\xBD" moneybag:"\xF0\x9F\x92\xB0"
+# Add a fun prompt for dev user
+# alien:"\xF0\x9F\x91\xBD" fish:"\xF0\x9F\x90\xA0" elephant:"\xF0\x9F\x91\xBD" moneybag:"\xF0\x9F\x92\xB0"
 RUN echo 'PS1="\[$(tput bold)$(tput setaf 4)\]dev-box $(echo -e "\xF0\x9F\x92\xB0") \[$(tput sgr0)\] [\\u@\\h]:\\W \\$ "' >> /home/dev/.bashrc && \
     echo 'alias ls="ls --color=auto"' >> /home/dev/.bashrc
 
