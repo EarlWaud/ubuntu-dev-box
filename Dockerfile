@@ -15,7 +15,28 @@ RUN apt-get update -y && apt-get install -y \
   tcpdump \
   screen \
   gnupg2 \
+  openssh-server \
+  openssh-client \
+  nano \
+  openssl \
+  libreadline6 \
+  libreadline6-dev \
+  zlib1g \
+  zlib1g-dev \
+  libssl-dev \
+  libyaml-dev \
+  libsqlite3-dev \
+  sqlite3 \
+  libxml2-dev \
+  libxslt-dev \
+  autoconf \
+  libc6-dev \
+  ncurses-dev \
   whois 
+
+
+# basics
+#automake libtool bison subversion pkg-config
 
 # Setup user "dev"
 RUN useradd --create-home -m -s /bin/bash -G sudo -p $(mkpasswd -m sha-512 intuit01) dev
@@ -36,10 +57,9 @@ RUN curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-co
 RUN chmod +x /usr/local/bin/docker-compose
 
 # Install Ruby and Rails dependencies
-#RUN gpg2 --keyserver hkp://keys.gnupg.net:80 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
-RUN gpg --keyserver $(getent hosts keys.gnupg.net | awk '{ print $1 }' | head -1) --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
-RUN gpg --keyserver $(getent hosts keys.gnupg.net | awk '{ print $1 }' | head -1) --recv-keys 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
-RUN curl -L https://get.rvm.io | bash -s stable
+# install RVM, Ruby, and Bundler
+RUN \curl -sSL https://rvm.io/mpapis.asc | gpg2 --import -
+RUN \curl -L https://get.rvm.io | bash -s stable
 RUN /bin/bash -l -c "rvm requirements"
 RUN /bin/bash -l -c "rvm install 2.0"
 RUN /bin/bash -l -c "gem install bundler --no-ri --no-rdoc"
@@ -48,18 +68,8 @@ RUN usermod -aG rvm dev
 RUN /bin/bash -l -c "rvm install ruby --default"
 RUN /bin/bash -l -c "rvm install ruby-dev --default"
 
-#RUN apt-get update && apt-get install -y \
-#  ruby \
-#  ruby-dev \
-#  build-essential \
-#  libxml2-dev \
-#  libxslt1-dev \
-#  zlib1g-dev \
-#  libsqlite3-dev 
-
 # Install Rails
 RUN /bin/bash -l -c "gem install rails"
-#RUN gem install rails
 
 # Install npm
 RUN apt-get install -y nodejs npm
