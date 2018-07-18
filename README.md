@@ -32,3 +32,12 @@ docker container rm devbox
 docker image rm --force ubuntu-devbox:latest
 ```
 
+# TODO
+fix the hard coding of the path
+
+fix ruby
+
+add helm
+
+add test scripts for testing stuff like Artifactory pull and push for each type of Artifact
+
