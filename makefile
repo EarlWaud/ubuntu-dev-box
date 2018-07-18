@@ -7,6 +7,8 @@ run:
 run-gnome:
 	./run-with-gnome.sh
 
-clean:
+clean: remove-container
+	docker rmi --force ubuntu-devbox:latest
+
+remove-container:
 	docker container rm devbox
-	docker rmi ubuntu-devbox:latest
