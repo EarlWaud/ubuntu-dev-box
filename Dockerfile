@@ -133,6 +133,8 @@ RUN echo "dev  ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers
 RUN chown -R dev: /home/dev
 USER dev
 
+RUN curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
+
 # Add a fun prompt for dev user
 # alien:"\xF0\x9F\x91\xBD" fish:"\xF0\x9F\x90\xA0" elephant:"\xF0\x9F\x91\xBD" moneybag:"\xF0\x9F\x92\xB0"
 RUN echo 'PS1="\[$(tput bold)$(tput setaf 4)\]dev-box $(echo -e "\xF0\x9F\x92\xB0") \[$(tput sgr0)\] [\\u@\\h]:\\W \\$ "' >> /home/dev/.bashrc && \
