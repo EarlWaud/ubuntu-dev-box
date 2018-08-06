@@ -38,7 +38,7 @@ RUN apt-get update -y && apt-get install -y \
 #automake libtool bison subversion pkg-config
 
 # Setup user "dev"
-RUN useradd --create-home -m -s /bin/bash -G sudo -p $(mkpasswd -m sha-512 intuit01) dev
+RUN useradd --create-home -m -s /bin/bash -G sudo -p $(mkpasswd -m sha-512 password) dev
 
 # Install docker-cd
 RUN apt-get update -y && apt-get install -y \
